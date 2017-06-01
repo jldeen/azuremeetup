@@ -1,0 +1,24 @@
+acsdeploy:
+  image: azuresdk/azure-cli-python:latest
+  encrypted_env_file: azure.env.encrypted
+  environment:
+  - Resource=LFNW-CS
+  - Location=eastus
+  - Servicename=ACSJDDemo
+  - Orchestrator=Swarm
+  - Dnsprefix=lfnwdemo
+  - sshkey=/deploy/lfnw.pub
+  volumes:
+  - ./:/deploy
+sshtunnel:
+  build:
+    image: sshtunnel
+    dockerfile_path: sshtunnel/Dockerfile
+    add_docker: true
+  encrypted_env_file: azure.env.encrypted
+  environment: 
+  - Servicename=ACSJDDemo
+  - Resource=LFNW-CS
+  - Orchestrator=Swarm
+  - local_port=2375
+  - remote_port=2375
